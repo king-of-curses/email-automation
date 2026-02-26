@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email automation · Dodo Payments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --dodo-green: #10b981;
+      --dodo-green-hover: #059669;
+      --dodo-green-light: #d1fae5;
+      --dodo-dark: #0d0d0d;
+      --dodo-gray: #4b5563;
+      --dodo-gray-light: #f3f4f6;
+      --dodo-border: #e5e7eb;
+      --dodo-error: #dc2626;
+      --dodo-success: #059669;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      background: var(--dodo-gray-light);
+      color: var(--dodo-dark);
+      line-height: 1.5;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dodo-dark);
+    }
+    .subtitle {
+      color: var(--dodo-gray);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--dodo-border);
+    }
+    section h2 {
+      margin: 0 0 0.75rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--dodo-dark);
+    }
+    label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--dodo-dark);
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="file"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--dodo-border);
+      border-radius: 8px;
+      font: inherit;
+      font-size: 0.875rem;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--dodo-green);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    button {
+      padding: 0.6rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      font: inherit;
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      background: var(--dodo-green);
+      color: #fff;
+    }
+    button:hover { background: var(--dodo-green-hover); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    button.secondary {
+      background: var(--dodo-gray);
+      color: #fff;
+    }
+    button.secondary:hover { background: #374151; }
+    .status {
+      font-size: 0.875rem;
+      color: var(--dodo-gray);
+      margin-top: 0.5rem;
+    }
+    .status.error { color: var(--dodo-error); }
+    .status.success { color: var(--dodo-success); }
+    .template-card {
+      padding: 0.875rem 1rem;
+      border: 1px solid var(--dodo-border);
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .template-card:hover { background: var(--dodo-gray-light); border-color: var(--dodo-green); }
+    .template-card.selected {
+      border-color: var(--dodo-green);
+      background: var(--dodo-green-light);
+    }
+    .template-card strong { display: block; margin-bottom: 0.25rem; font-size: 0.9rem; }
+    .template-card small { color: var(--dodo-gray); font-size: 0.8rem; }
+    .signature-card {
+      padding: 0.875rem 1rem;
+      border: 1px solid var(--dodo-border);
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .signature-card:hover { background: var(--dodo-gray-light); border-color: var(--dodo-green); }
+    .signature-card.selected { border-color: var(--dodo-green); background: var(--dodo-green-light); }
+    .signature-card strong { display: block; margin-bottom: 0.25rem; font-size: 0.9rem; }
+    .signature-card small { color: var(--dodo-gray); font-size: 0.8rem; }
+    code {
+      background: var(--dodo-gray-light);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      font-size: 0.85em;
+      color: var(--dodo-dark);
+    }
+    /* CSV preview table */
+    .csv-preview-wrap {
+      margin-top: 0.75rem;
+      border: 1px solid var(--dodo-border);
+      border-radius: 8px;
+      overflow: hidden;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .csv-preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .csv-preview-table th,
+    .csv-preview-table td {
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--dodo-border);
+    }
+    .csv-preview-table th {
+      background: var(--dodo-gray-light);
+      font-weight: 600;
+      color: var(--dodo-dark);
+      position: sticky;
+      top: 0;
+    }
+    .csv-preview-table tr:last-child td { border-bottom: none; }
+    .csv-preview-table tbody tr:hover { background: var(--dodo-gray-light); }
+    .csv-preview-count {
+      font-size: 0.8rem;
+      color: var(--dodo-gray);
+      margin-top: 0.35rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Email automation</h1>
+  <p class="subtitle">Enter your Gmail and App Password below. They are only used to send and are not stored.</p>
+
+  <section>
+    <h2>Gmail credentials</h2>
+    <label>Gmail address</label>
+    <input type="text" id="gmail" placeholder="you@gmail.com" autocomplete="email">
+    <label>App Password <small>(from Google Account → Security → App passwords)</small></label>
+    <input type="password" id="password" placeholder="16-character app password" autocomplete="off">
+  </section>
+
+  <section>
+    <h2>Recipients (CSV)</h2>
+    <label>Upload a CSV with columns <code>name</code> and <code>email</code></label>
+    <input type="file" id="csvFile" accept=".csv">
+    <div id="csvPreview" class="status"></div>
+    <div id="csvTableWrap" class="csv-preview-wrap" style="display: none;"></div>
+    <div id="csvPreviewCount" class="csv-preview-count"></div>
+  </section>
+
+  <section>
+    <h2>Choose template</h2>
+    <p>Select a template to use when sending:</p>
+    <div id="templateList"></div>
+  </section>
+
+  <section>
+    <h2>Choose signature</h2>
+    <p>Optional. Select a signature for the email footer. If none is selected, the default signature is used.</p>
+    <div id="signatureList"></div>
+  </section>
+
+  <section>
+    <h2>Add new signature</h2>
+    <label>Signature name (id, e.g. my-signature)</label>
+    <input type="text" id="newSignatureName" placeholder="my-signature">
+    <label>Name</label>
+    <input type="text" id="newSignatureNameField" placeholder="Purrvi">
+    <label>Email</label>
+    <input type="text" id="newSignatureEmail" placeholder="purrvi@dodopayments.com">
+    <label>Title</label>
+    <input type="text" id="newSignatureTitle" placeholder="Customers and Community">
+    <button type="button" id="addSignatureBtn">Add signature</button>
+    <div id="addSignatureStatus" class="status"></div>
+  </section>
+
+  <section>
+    <h2>Add new template</h2>
+    <label>Template ID (e.g. my-template)</label>
+    <input type="text" id="newTemplateId" placeholder="my-template">
+    <label>Subject</label>
+    <input type="text" id="newTemplateSubject" placeholder="Hello {{name}}">
+    <label>Body (use {{name}} for recipient name)</label>
+    <textarea id="newTemplateBody" placeholder="Hi {{name}},&#10;&#10;..."></textarea>
+    <button type="button" id="addTemplateBtn">Add template</button>
+    <div id="addTemplateStatus" class="status"></div>
+  </section>
+
+  <section>
+    <h2>Send emails</h2>
+    <p>Enter Gmail + App Password, upload CSV, select a template, then click Send.</p>
+    <button type="button" id="sendBtn" disabled>Send emails</button>
+    <div id="sendProgress" class="status"></div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
